@@ -9,27 +9,32 @@ Created on Wed Aug  5 01:41:35 2020
 import numpy as np
 
 class StochasticRuler:
-    def __init__(self,
-                 iter_num=100, rep_num=1, direct_num=1,
-                 theta_0=None, d=0, loss_true=None, loss_noisy=None,
-                 record_theta_flag=True, record_loss_flag=True):
+    def __init__(self, M_multiplier=1,
+                 iter_num=100, rep_num=1,
+                 theta_0=None, loss_true=None, loss_noisy=None,
+                 d=0,
+                 record_theta_flag=True, record_loss_flag=True,
+                 seed=1):
 
-        # sigma: new candidate point theta + normal(0, simga^2)
-        # direct_num: number of directions per iteration
+        # M_k: np.ceil(M_multiplier * np.log(iter_idx + 2)) number of measurements to accept a point
         # d: the first d components are integers
+
+        self.seed = seed
+        np.random.seed(self.seed)
+
+        self.M_multiplier = M_multiplier
 
         self.iter_num = iter_num
         self.rep_num = rep_num
-        self.direct_num = direct_num
 
         self.theta_0 = theta_0
-        self.loss_0 = loss_true(theta_0)
-
         self.p = theta_0.shape[0] # shape = (p,)
-        self.d = d
+        self.loss_0 = loss_true(theta_0)
 
         self.loss_true = loss_true
         self.loss_noisy = loss_noisy
+
+        self.d = d
 
         self.record_theta_flag = record_theta_flag
         self.record_loss_flag = record_loss_flag
@@ -47,13 +52,15 @@ class StochasticRuler:
             self.loss_k_all = np.empty((self.iter_num, self.rep_num))
 
         for rep_idx in range(self.rep_num):
-            print("Algo: stochastic ruler, rep_idx:", rep_idx, "/", self.rep_num)
+            print("algo: Stochastic Ruler; rep_idx:", rep_idx+1, "/", self.rep_num)
             theta = self.theta_0
 
             for iter_idx in range(self.iter_num):
                 M_k = int(np.ceil(0.5 * np.log(iter_idx + 2)))
                 theta_new = np.random.rand(self.p) * self.theta_0
                 theta_new = self.project(theta_new)
+
+                M_k = int(np.ceil(self.M_multiplier * np.log(iter_idx + 2)))
                 accept_flag = True
                 for i in range(M_k):
                     loss_new = self.loss_noisy(theta_new)

@@ -55,7 +55,7 @@ loss_star = loss_true(theta_star)
 
 theta_0 = np.array([18, 10, 50, 150])
 loss_0 = loss_true(theta_0)
-np.savez("data/pressure_vessel_design",
+np.savez("data/pressure-vessel-design",
          theta_star=theta_star, loss_star=loss_star,
          theta_0=theta_0, loss_0=loss_0)
 
@@ -72,7 +72,7 @@ MSPSA_solver = MSPSA(a=0.0005 * np.array([1,1,10,10]),
                       d=d, lb=lb, ub=ub, loss_ineq_constraint=loss_ineq_constraint, Lagrangian_multiplier=1000,
                       seed=1)
 MSPSA_solver.train()
-show_result(MSPSA_solver, "pressure_vessel_design_MSPSA")
+show_result(MSPSA_solver, "pressure-vessel-design-MSPSA")
 
 ### Random Search ###
 RS_solver = RandomSearch(sigma=np.sqrt(0.025),
@@ -81,7 +81,7 @@ RS_solver = RandomSearch(sigma=np.sqrt(0.025),
                           d=d, lb=lb, ub=ub, loss_ineq_constraint=loss_ineq_constraint,
                           seed=1)
 RS_solver.train()
-show_result(RS_solver, "pressure_vessel_design_RS")
+show_result(RS_solver, "pressure-vessel-design-RS")
 
 ### Stochastic Ruler ###
 M_multiplier = 1
@@ -89,8 +89,9 @@ SR_meas_num = 0
 SR_iter_num = 0
 SR_iter_seq = []
 while SR_meas_num < meas_num:
-    SR_meas_num += int(np.ceil(M_multiplier * np.log(SR_iter_num + 2)))
-    SR_iter_seq.append(SR_meas_num)
+    M_k = int(np.ceil(M_multiplier * np.log(SR_iter_num + 2)))
+    SR_meas_num += M_k
+    SR_iter_seq.append(M_k)
     SR_iter_num += 1
 
 SR_solver = StochasticRuler(M_multiplier=M_multiplier,
@@ -99,4 +100,4 @@ SR_solver = StochasticRuler(M_multiplier=M_multiplier,
                             d=d, lb=lb, ub=ub, loss_ineq_constraint=loss_ineq_constraint,
                             seed=1)
 SR_solver.train()
-show_result(SR_solver, "pressure_vessel_design_SR")
+show_result(SR_solver, "pressure-vessel-design-SR")

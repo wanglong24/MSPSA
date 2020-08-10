@@ -16,7 +16,7 @@ class StochasticRuler:
                  record_theta_flag=True, record_loss_flag=True,
                  seed=1):
 
-        # sigma: new candidate point theta + normal(0, simga^2)
+        # M_k: np.ceil(M_multiplier * np.log(iter_idx + 2)) number of measurements to accept a point
         # d: the first d components are integers
 
         self.seed = seed
