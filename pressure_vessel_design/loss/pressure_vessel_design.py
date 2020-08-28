@@ -46,9 +46,10 @@ if __name__ == "__main__":
     # WOA: 6059.7410
     theta = np.array([13, 7, 42.0984455958549, 176.6365958424394])
     theta = np.array([12, 6, 38.79363018, 200])
+    theta = np.array([13, 7, 41.5960, 185.9336])
 
     # theta_0 = [13, 7, 42.0983, 176.6366]
     # theta = [5.,6.,47.54745887, 149.74276268]
 
-    print(pressure_vessel_design.loss(theta))
-    print(np.around(pressure_vessel_design.get_constraint(theta), decimals=5))
+    print(pressure_vessel_design.get_loss(theta))
+    print(np.around(pressure_vessel_design.get_ineq_constraint(theta), decimals=5))
