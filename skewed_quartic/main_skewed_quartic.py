@@ -57,7 +57,7 @@ np.savez("data/skewed-quartic",
 meas_num = 5000; rep_num = 20
 
 ### MSPSA ###
-MSPSA_solver = MSPSA(a=0.1, c=0.5, A=500, alpha=0.667, gamma=0.1666,
+MSPSA_solver = MSPSA(a=0.1, c=0.5, A=500, alpha=0.7, gamma=0.167,
                      iter_num=int(meas_num/2), rep_num=rep_num,
                      theta_0=theta_0, loss_true=loss_true, loss_noisy=loss_noisy,
                      d=d, seed=1)

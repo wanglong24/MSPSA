@@ -14,6 +14,8 @@ from algorithm.mspsa_constraint import MSPSA
 from algorithm.random_search_constraint import RandomSearch
 from algorithm.stochastic_ruler_constraint import StochasticRuler
 
+str_today = str(np.datetime64('today'))
+
 ### normalize result ###
 def loss_noisy(theta):
     return loss_obj.get_loss(theta) + np.random.normal(0,100,1)
@@ -39,7 +41,7 @@ def show_result(solver, file_name):
     print("loss terminal", loss_terminal)
     print("norm loss terminal", norm_loss_terminal)
 
-    np.savez("data/" + file_name,
+    np.savez("data/" + file_name + "-" + str_today,
               theta_terminal=theta_terminal,
               loss_terminal=loss_terminal,
               norm_loss_terminal=norm_loss_terminal)
@@ -66,13 +68,16 @@ meas_num = 20000; rep_num = 20
 
 ### MSPSA ###
 MSPSA_solver = MSPSA(a=0.0005 * np.array([1,1,10,10]),
-                      c=1, A=500, alpha=0.667, gamma=0.1666,
+                      c=1, A=100, alpha=0.7, gamma=0.1667,
                       iter_num=int(meas_num/2), rep_num=rep_num,
                       theta_0=theta_0, loss_true=loss_true, loss_noisy=loss_noisy,
                       d=d, lb=lb, ub=ub, loss_ineq_constraint=loss_ineq_constraint, Lagrangian_multiplier=1000,
                       seed=1)
 MSPSA_solver.train()
 show_result(MSPSA_solver, "pressure-vessel-design-MSPSA")
+
+
+
 
 ### Random Search ###
 RS_solver = RandomSearch(sigma=np.sqrt(0.025),

@@ -44,11 +44,11 @@ np.savez("data/skewed_quartic",
 
 ### algorithm parameters ###
 iter_num = 5000; rep_num = 20
-a = 0.05
+a = 0.1
 A = 100
-alpha = 0.667
+alpha = 0.7
 c = 0.5
-gamma = 0.1666
+gamma = 0.167
 
 MSPSA_solver = MSPSA(a=a, c=c, A=A, alpha=alpha, gamma=gamma,
                      iter_num=iter_num, rep_num=rep_num,
@@ -97,12 +97,13 @@ MSPSA_theta_error_bound = np.concatenate(([theta_0_error**2], MSPSA_theta_error_
 linewidth = 2
 plot_theta = plt.figure()
 plt.grid()
-plt.title(r'Mean Squared Error for $\hat{\mathbf{\theta}}_k$')
+plt.title(r'Mean-Squared Error for $\hat{\mathbf{\theta}}_k$')
 plt.xlabel("Number of Iterations")
 plt.ylabel("Mean Squared Error")
 plt.plot(MSPSA_theta_error, linewidth=linewidth, linestyle="-", color="black")
 plt.plot(MSPSA_theta_error_bound, linewidth=linewidth, linestyle="--", color="black")
-plt.legend(["MSPSA", "Finite Sample Upper Bound"])
+plt.legend(["MSPSA", "Finite-Sample Upper Bound"])
+plt.show()
 plt.close()
 plot_theta.savefig("figure/skewed-quartic-MSPSA-bound-"+str_today+".pdf", bbox_inches='tight')
 
